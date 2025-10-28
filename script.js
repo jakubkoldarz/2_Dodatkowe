@@ -101,6 +101,54 @@ function createInfo(txt) {
 
         const modal = showModal();
 
+        fetch("https://jsonplaceholder.typicode.com/posts/1", {
+            method: "PATCH",
+            body: JSON.stringify({ title: "foo" }),
+            headers: { "Content-type": "application/json; charset=UTF-8" },
+        })
+            .then((response) => response.json())
+            .then((item) => {
+                modal.remove();
+                answer.innerHTML = null;
+
+                const pre = document.createElement("pre");
+                pre.innerHTML = JSON.stringify(item, null, 2);
+
+                answer.appendChild(pre);
+            })
+            .catch((error) => {
+                modal.remove();
+                answer.innerHTML = `<p style="color: red;">Błąd: ${error.message}</p>`;
+            });
+    });
+
+    cw6.addEventListener("click", function () {
+        answer.innerHTML = null;
+
+        const modal = showModal();
+
+        fetch("https://jsonplaceholder.typicode.com/posts/1", {
+            method: "DELETE",
+        })
+            .then((response) => response.json())
+            .then((item) => {
+                modal.remove();
+                answer.innerHTML = null;
+
+                const info = createInfo(`Post ID=1 usunięty status: {deleted}`);
+                answer.appendChild(info);
+            })
+            .catch((error) => {
+                modal.remove();
+                answer.innerHTML = `<p style="color: red;">Błąd: ${error.message}</p>`;
+            });
+    });
+
+    cw9.addEventListener("click", function () {
+        answer.innerHTML = null;
+
+        const modal = showModal();
+
         fetch("https://jsonplaceholder.typicode.com/posts")
             .then((response) => response.json())
             .then((array) => {
