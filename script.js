@@ -58,6 +58,7 @@ function showTable(array) {
 function createInfo(txt) {
     const p = document.createElement("p");
     p.textContent = txt;
+
     return p;
 }
 
