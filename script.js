@@ -62,14 +62,39 @@ function createInfo(txt) {
     return p;
 }
 
+function loadPosts(answer, start, limit) {
+    answer.innerHTML = null;
+
+    const modal = showModal();
+
+    fetch(`https://jsonplaceholder.typicode.com/posts?_start=${start}&_limit=${limit}`)
+        .then((response) => response.json())
+        .then((array) => {
+            modal.remove();
+            console.log(array);
+            answer.innerHTML = null;
+            const table = showTable(array);
+            answer.appendChild(table);
+        })
+        .catch((error) => {
+            modal.remove();
+            answer.innerHTML = `<p style="color: red;">Błąd: ${error.message}</p>`;
+        });
+}
+
 (function () {
     const cw4_put = document.getElementById("cw4_put");
     const cw4_patch = document.getElementById("cw4_patch");
     const cw4_delete = document.getElementById("cw4_delete");
     const cw5 = document.getElementById("cw5");
     const cw6 = document.getElementById("cw6");
-    const cw9 = document.getElementById("cw9");
+    const cw7 = document.getElementById("cw7");
+    const cw7_next = document.getElementById("cw7_next");
+    const cw7_prev = document.getElementById("cw7_prev");
     const answer = document.getElementById("answer");
+
+    let _start = 0;
+    let _limit = 10;
 
     cw4_put.addEventListener("click", function () {
         answer.innerHTML = null;
@@ -186,5 +211,19 @@ function createInfo(txt) {
                 modal.remove();
                 answer.innerHTML = `<p style="color: red;">Błąd: ${error.message}</p>`;
             });
+    });
+
+    cw7.addEventListener("click", function () {
+        loadPosts(answer, _start, _limit);
+    });
+
+    cw7_next.addEventListener("click", function () {
+        _start = _start >= 99 ? 99 : _start + _limit;
+        loadPosts(answer, _start, _limit);
+    });
+
+    cw7_prev.addEventListener("click", function () {
+        _start = _start <= 0 ? 0 : _start - _limit;
+        loadPosts(answer, _start, _limit);
     });
 })();
