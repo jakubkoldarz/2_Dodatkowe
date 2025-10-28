@@ -19,7 +19,7 @@ function showModal() {
     return modal;
 }
 
-function showTable(array) {
+function showTable(array, columns = ["title", "body"], headers = ["Tytuł", "Treść"]) {
     const table = document.createElement("table");
     table.className = "posts-table";
 
@@ -27,8 +27,8 @@ function showTable(array) {
     thead.innerHTML = `
                     <tr>
                         <th>ID</th>
-                        <th>Tytuł</th>
-                        <th>Treść</th>
+                        <th>${headers[0]}</th>
+                        <th>${headers[1]}</th>
                     </tr>
                 `;
     table.appendChild(thead);
@@ -42,11 +42,11 @@ function showTable(array) {
         tr.appendChild(tdId);
 
         const tdTitle = document.createElement("td");
-        tdTitle.textContent = item?.title || "";
+        tdTitle.textContent = item[columns[0]] || "";
         tr.appendChild(tdTitle);
 
         const tdBody = document.createElement("td");
-        tdBody.textContent = item?.body || "";
+        tdBody.textContent = item[columns[1]] || "";
         tr.appendChild(tdBody);
 
         tbody.appendChild(tr);
@@ -168,17 +168,18 @@ function createInfo(txt) {
             });
     });
 
-    cw9.addEventListener("click", function () {
+    cw6.addEventListener("click", function () {
         answer.innerHTML = null;
 
         const modal = showModal();
 
-        fetch("https://jsonplaceholder.typicode.com/posts")
+        fetch("https://jsonplaceholder.typicode.com/posts/1/comments")
             .then((response) => response.json())
             .then((array) => {
                 modal.remove();
+                console.log(array);
                 answer.innerHTML = null;
-                const table = showTable(array);
+                const table = showTable(array, ["name", "body"], ["Nazwa", "Treść"]);
                 answer.appendChild(table);
             })
             .catch((error) => {
