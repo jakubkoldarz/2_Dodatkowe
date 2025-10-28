@@ -63,15 +63,15 @@ function createInfo(txt) {
 }
 
 (function () {
-    const cw4 = document.getElementById("cw4");
+    const cw4_put = document.getElementById("cw4_put");
+    const cw4_patch = document.getElementById("cw4_patch");
+    const cw4_delete = document.getElementById("cw4_delete");
     const cw5 = document.getElementById("cw5");
     const cw6 = document.getElementById("cw6");
-    const cw7 = document.getElementById("cw7");
-    const cw8 = document.getElementById("cw8");
     const cw9 = document.getElementById("cw9");
     const answer = document.getElementById("answer");
 
-    cw4.addEventListener("click", function () {
+    cw4_put.addEventListener("click", function () {
         answer.innerHTML = null;
 
         const modal = showModal();
@@ -96,7 +96,7 @@ function createInfo(txt) {
             });
     });
 
-    cw5.addEventListener("click", function () {
+    cw4_patch.addEventListener("click", function () {
         answer.innerHTML = null;
 
         const modal = showModal();
@@ -122,7 +122,7 @@ function createInfo(txt) {
             });
     });
 
-    cw6.addEventListener("click", function () {
+    cw4_delete.addEventListener("click", function () {
         answer.innerHTML = null;
 
         const modal = showModal();
@@ -137,6 +137,30 @@ function createInfo(txt) {
 
                 const info = createInfo(`Post ID=1 usunięty status: {deleted}`);
                 answer.appendChild(info);
+            })
+            .catch((error) => {
+                modal.remove();
+                answer.innerHTML = `<p style="color: red;">Błąd: ${error.message}</p>`;
+            });
+    });
+
+    cw5.addEventListener("click", function () {
+        answer.innerHTML = null;
+
+        const modal = showModal();
+
+        const userIdInput = document.getElementById("cw5_id");
+        const userId = userIdInput.value;
+
+        fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`, {
+            method: "GET",
+        })
+            .then((response) => response.json())
+            .then((array) => {
+                modal.remove();
+                answer.innerHTML = null;
+
+                answer.appendChild(showTable(array));
             })
             .catch((error) => {
                 modal.remove();
